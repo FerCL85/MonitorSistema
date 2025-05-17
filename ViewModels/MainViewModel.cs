@@ -6,7 +6,6 @@ using System.IO;
 using System.Runtime.CompilerServices;
 using Visiotech.HardwareInfo;
 using System.Diagnostics;
-using Microsoft.VisualBasic;
 
 namespace MonitorSistema.ViewModels
 {
@@ -86,7 +85,8 @@ namespace MonitorSistema.ViewModels
         {
             cpuSerial = HardwareInfo.GetProcessorID();
             motherboardSerial = HardwareInfo.GetMotherboardID();
-            gpuSerial = "-";//HardwareInfo.GetGpuID();
+            gpuSerial = "-";//HardwareInfo.GetGpuID(); 
+            //Al hacer la llamada a este método devuelve el error InsufficientMemoryException
 
             _timer = new System.Timers.Timer(_interval);
             _timer.Elapsed += (s, e) => CaptureSample();

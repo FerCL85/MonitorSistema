@@ -7,7 +7,9 @@
         xmlns:vm="clr-namespace:MonitorSistema.ViewModels"
         mc:Ignorable="d"
         Title="Monitor del Sistema" Height="550" Width="900"
-        Background="#FAFAFA">
+        Background="#FAFAFA"
+        ResizeMode="NoResize"
+        WindowStyle="ToolWindow">
 
     <Window.DataContext>
         <vm:MainViewModel/>
@@ -65,14 +67,14 @@
                       AutoGenerateColumns="False"
                       CanUserAddRows="False"
                       IsReadOnly="True"
-                      Height="350"
+                      Height="446"
                       RowBackground="White"
                       AlternatingRowBackground="#F3F3F3"
                       GridLinesVisibility="Horizontal"
                       HeadersVisibility="Column">
 
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Fecha/Hora" Binding="{Binding Timestamp}" Width="*" />
+                    <DataGridTextColumn Header="Fecha/Hora" Binding="{Binding Timestamp, StringFormat=dd/MM/yyyy HH:mm:ss}" Width="*" />
                     <DataGridTextColumn Header="CPU" Binding="{Binding CpuSerial}" Width="*" />
                     <DataGridTextColumn Header="Placa" Binding="{Binding MotherboardSerial}" Width="*" />
                     <DataGridTextColumn Header="GPU" Binding="{Binding GpuSerial}" Width="*" />
