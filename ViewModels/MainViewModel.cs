@@ -2,10 +2,11 @@
 using Newtonsoft.Json;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Runtime.CompilerServices;
+using System.Windows;
 using Visiotech.HardwareInfo;
-using System.Diagnostics;
 
 namespace MonitorSistema.ViewModels
 {
@@ -19,7 +20,8 @@ namespace MonitorSistema.ViewModels
         private readonly string motherboardSerial;
         private readonly string gpuSerial;
 
-        public ObservableCollection<SystemSample> Samples { get; set; } = new();
+        public ObservableCollection<SystemSample> Samples { get; set; } = new ObservableCollection<SystemSample>();
+
         private PerformanceCounter cpuCounter = new PerformanceCounter("Processor", "% Processor Time", "_Total");
         public RelayCommand StartCommand { get; }
         public RelayCommand StopCommand { get; }
@@ -60,7 +62,7 @@ namespace MonitorSistema.ViewModels
                     _interval = value;
                     OnPropertyChanged();
                     if (_timer != null)
-                        _timer.Interval = _interval;
+                        _timer.Interval = _interval; ;
                 }
             }
         }
@@ -90,6 +92,7 @@ namespace MonitorSistema.ViewModels
 
             _timer = new System.Timers.Timer(_interval);
             _timer.Elapsed += (s, e) => CaptureSample();
+            _timer.AutoReset = true;
 
             StartCommand = new RelayCommand(_ => Start(), _ => !IsRunning);
             StopCommand = new RelayCommand(_ => Stop(), _ => IsRunning);
@@ -122,7 +125,14 @@ namespace MonitorSistema.ViewModels
                 RamUsage = GetRamUsage()
             };
 
-            App.Current.Dispatcher.Invoke(() => Samples.Insert(0, sample));
+            if (Application.Current?.Dispatcher != null)
+            {
+                Application.Current.Dispatcher.Invoke(() => Samples.Insert(0, sample));
+            }
+            else
+            {
+                Samples.Insert(0, sample);
+            }
         }
 
         private void LoadData()
